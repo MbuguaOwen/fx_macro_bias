@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>FX Macro Bias — Weekly Dashboard</title>
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #111a33;
+      --muted: #9aa4bf;
+      --text: #e8ecff;
+      --accent: #6ea8fe;
+      --border: rgba(255,255,255,0.08);
+    }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    .wrap { max-width: 1220px; margin: 0 auto; padding: 22px; }
+    .top {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      border-bottom: 1px solid var(--border); padding-bottom: 14px; margin-bottom: 16px;
+    }
+    h1 { font-size: 20px; margin: 0; letter-spacing: 0.2px; }
+    .sub { color: var(--muted); font-size: 13px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 980px) {
+      .grid2 { grid-template-columns: 1.3fr 0.7fr; }
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.30);
+    }
+    .card h2 { font-size: 14px; margin: 0 0 10px 0; color: #cdd6ff; }
+    .table {
+      width: 100%; border-collapse: collapse; font-size: 12px;
+    }
+    .table th, .table td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 8px; text-align: right; white-space: nowrap;
+    }
+    .table th:first-child, .table td:first-child { text-align: left; }
+    .pill {
+      display: inline-block; padding: 2px 8px; border-radius: 999px; font-weight: 700;
+      border: 1px solid var(--border);
+    }
+    .b{ background: rgba(110,168,254,0.15); color: #bcd2ff; }
+    .s{ background: rgba(255,77,109,0.12); color: #ffb3c2; }
+    .n{ background: rgba(200,200,200,0.08); color: #d7ddf6; }
+    .muted { color: var(--muted); }
+    .foot { margin-top: 10px; color: var(--muted); font-size: 12px; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>FX Macro Bias — Weekly Dashboard (last 4 weeks)</h1>
+        <div class="sub">Weeks: 2026-01-23 → 2026-02-13 • Generated: 2026-02-23 08:29 UTC</div>
+      </div>
+      <div class="sub">Pillars: Rates • Growth • Risk • Positioning</div>
+    </div>
+
+    <div class="grid grid2">
+      <div class="card">
+        <h2>Final Bias Heatmap (BULL / NEUTRAL / BEAR)</h2>
+        <div id="bias_heat" style="height: 520px;"></div>
+        <div class="foot">Value mapping: BEAR=-1, NEUTRAL=0, BULL=+1.</div>
+      </div>
+
+      <div class="card">
+        <h2>Bias Distribution Over Time</h2>
+        <div id="counts" style="height: 260px;"></div>
+        <h2 style="margin-top: 14px;">Score Heatmap</h2>
+        <div id="score_heat" style="height: 170px;"></div>
+        <h2 style="margin-top: 14px;">Conviction Heatmap</h2>
+        <div id="conviction_heat" style="height: 150px;"></div>
+        <h2 style="margin-top: 14px;">Data Quality</h2>
+        <div id="data_quality" class="sub"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 14px;">
+      <h2>Latest Week Leaderboard (2026-02-13)</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Pair</th>
+            <th>Rates</th>
+            <th>Growth</th>
+            <th>Risk</th>
+            <th>Positioning</th>
+            <th>Total</th>
+            <th>Conviction</th>
+            <th>Bias</th>
+            <th>Quality</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>EURCHF</td><td>+1.00</td><td>-0.58</td><td>-0.50</td><td>+0.46</td><td>+0.35</td><td>MODERATE</td><td><span class="pill b">BULL_BASE</span></td><td></td></tr>
+<tr><td>GBPJPY</td><td>+1.00</td><td>-0.53</td><td>-0.50</td><td>+0.33</td><td>+0.33</td><td>MODERATE</td><td><span class="pill b">BULL_BASE</span></td><td></td></tr>
+<tr><td>AUDUSD</td><td>+0.38</td><td>+0.09</td><td>-0.25</td><td>+0.92</td><td>+0.33</td><td>MODERATE</td><td><span class="pill b">BULL_BASE</span></td><td></td></tr>
+<tr><td>AUDJPY</td><td>+1.00</td><td>-1.00</td><td>-1.00</td><td>+0.93</td><td>+0.29</td><td>MODERATE</td><td><span class="pill b">BULL_BASE</span></td><td></td></tr>
+<tr><td>GBPUSD</td><td>+0.05</td><td>+0.67</td><td>+0.25</td><td>+0.29</td><td>+0.25</td><td>MODERATE</td><td><span class="pill b">BULL_BASE</span></td><td></td></tr>
+<tr><td>USDJPY</td><td>+1.00</td><td>-1.00</td><td>-0.75</td><td>+0.05</td><td>+0.15</td><td>NONE</td><td><span class="pill n">NEUTRAL</span></td><td></td></tr>
+<tr><td>USDCAD</td><td>+0.49</td><td>-1.00</td><td>+0.25</td><td>+0.35</td><td>+0.13</td><td>NONE</td><td><span class="pill n">NEUTRAL</span></td><td></td></tr>
+<tr><td>USDCHF</td><td>+1.00</td><td>-0.94</td><td>-0.75</td><td>-0.28</td><td>+0.09</td><td>NONE</td><td><span class="pill n">NEUTRAL</span></td><td></td></tr>
+<tr><td>EURJPY</td><td>+0.37</td><td>-0.84</td><td>-0.50</td><td>+0.69</td><td>+0.06</td><td>NONE</td><td><span class="pill n">NEUTRAL</span></td><td></td></tr>
+<tr><td>XAUUSD</td><td>NA</td><td>NA</td><td>+0.25</td><td>-0.13</td><td>+0.03</td><td>NONE</td><td><span class="pill n">NEUTRAL</span></td><td></td></tr>
+<tr><td>EURUSD</td><td>-0.73</td><td>+0.36</td><td>+0.25</td><td>+0.66</td><td>-0.09</td><td>NONE</td><td><span class="pill n">NEUTRAL</span></td><td></td></tr>
+<tr><td>XAGUSD</td><td>NA</td><td>NA</td><td>+0.25</td><td>-0.56</td><td>-0.21</td><td>MODERATE</td><td><span class="pill s">BEAR_BASE</span></td><td></td></tr>
+<tr><td>NZDUSD</td><td>-0.12</td><td>-0.28</td><td>-0.25</td><td>-0.58</td><td>-0.26</td><td>MODERATE</td><td><span class="pill s">BEAR_BASE</span></td><td></td></tr>
+<tr><td>EURGBP</td><td>-0.78</td><td>-0.31</td><td>+0.00</td><td>+0.46</td><td>-0.32</td><td>MODERATE</td><td><span class="pill s">BEAR_BASE</span></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="foot">
+        Notes: pillar weights auto-renormalize when any pillar data is missing for a given pair/week.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DATA = {"weeks": ["2026-01-23", "2026-01-30", "2026-02-06", "2026-02-13"], "pairs": ["AUDJPY", "AUDUSD", "EURCHF", "EURGBP", "EURJPY", "EURUSD", "GBPJPY", "GBPUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY", "XAGUSD", "XAUUSD"], "bias_heat": [[1, 1, 1, 1], [0, 1, 1, 1], [1, 1, 1, 1], [-1, -1, -1, -1], [0, 0, 0, 0], [-1, -1, 0, 0], [1, 1, 1, 1], [0, 0, 0, 1], [-1, 0, -1, -1], [1, 1, 1, 0], [1, 0, 0, 0], [1, 1, 1, 0], [0, 0, -1, -1], [0, 0, 0, 0]], "score_heat": [[0.28432049512871976, 0.3633126109017073, 0.3533879415271733, 0.28632462709503925], [0.14774640573005773, 0.25100654280342777, 0.24743238358023253, 0.3346719846260341], [0.28682805069763034, 0.30407823809276446, 0.2887346050269003, 0.35270836144327067], [-0.4828257996201622, -0.39708762506715917, -0.3106957153763136, -0.32203109893279636], [0.10278308166248358, 0.15291838823121928, 0.19289578787008793, 0.06247739114022928], [-0.29542799811786286, -0.2141507639344447, -0.14530123101006573, -0.08648517012348836], [0.4544666387447394, 0.45851125678534854, 0.439568003218595, 0.33485545787495585], [0.18611133082195458, 0.18515280922986174, 0.16980685937597564, 0.25303438732237926], [-0.20754240344170158, -0.19761979301065086, -0.2614031413072538, -0.261155416920709], [0.24142989555949482, 0.22648157454043652, 0.2287552645179491, 0.13020072960694654], [0.2523268302988324, 0.1867717328684399, 0.09844713212248132, 0.09260026141281623], [0.327029299604813, 0.3184321484168315, 0.2980664817428679, 0.14784892093280438], [-0.13796518801417243, -0.17637642939087306, -0.2094713520439308, -0.2106184145279577], [0.13592725415628357, 0.0800903251946614, 0.027497864984145762, 0.03270700867090254]], "conviction_heat": [[0.28432049512871976, 0.3633126109017073, 0.3533879415271733, 0.28632462709503925], [0.14774640573005773, 0.25100654280342777, 0.24743238358023253, 0.3346719846260341], [0.28682805069763034, 0.30407823809276446, 0.2887346050269003, 0.35270836144327067], [0.4828257996201622, 0.39708762506715917, 0.3106957153763136, 0.32203109893279636], [0.10278308166248358, 0.15291838823121928, 0.19289578787008793, 0.06247739114022928], [0.29542799811786286, 0.2141507639344447, 0.14530123101006573, 0.08648517012348836], [0.4544666387447394, 0.45851125678534854, 0.439568003218595, 0.33485545787495585], [0.18611133082195458, 0.18515280922986174, 0.16980685937597564, 0.25303438732237926], [0.20754240344170158, 0.19761979301065086, 0.2614031413072538, 0.261155416920709], [0.24142989555949482, 0.22648157454043652, 0.2287552645179491, 0.13020072960694654], [0.2523268302988324, 0.1867717328684399, 0.09844713212248132, 0.09260026141281623], [0.327029299604813, 0.3184321484168315, 0.2980664817428679, 0.14784892093280438], [0.13796518801417243, 0.17637642939087306, 0.2094713520439308, 0.2106184145279577], [0.13592725415628357, 0.0800903251946614, 0.027497864984145762, 0.03270700867090254]], "counts": {"index": ["2026-01-23", "2026-01-30", "2026-02-06", "2026-02-13"], "columns": ["BEAR_BASE", "BULL_BASE", "NEUTRAL"], "values": [[3, 6, 5], [2, 6, 6], [3, 6, 5], [3, 5, 6]]}, "meta_by_week": {"2026-01-23": {"as_of": "2026-01-23", "risk_regime": {"as_of": "2026-01-23", "risk_on": false, "usd_bid": false, "vix": 16.09, "spx_sma50": 6838.191399999999, "spx_sma200": 6387.2899, "vix_sma20": 15.683499999999995, "dxy_sma50": 120.35386400000002, "dxy_sma200": 120.9331605, "obs_date": "2026-01-23", "spx_obs_date": "2026-01-23", "vix_obs_date": "2026-01-23", "dxy_obs_date": "2026-01-23"}, "weights": {"rates": 0.45, "growth": 0.2, "risk": 0.15, "positioning": 0.2}, "thresholds": {"bias_threshold": 0.2, "conviction": {"neutral_threshold": 0.15, "bands": {"weak": 0.2, "moderate": 0.45, "strong": 0.7, "extreme": 1.01}}}, "notes": {"rates": "2Y yield spread proxy (Stooq), sliced on-or-before as_of", "growth": "Hard mode (CESI/PMI via TradingEconomics, optional) or proxy equity return differential", "risk": "SPX (Stooq) + VIX/Dollar index (FRED) regime tilt, computed as-of", "positioning": "CFTC COT with report_date/release_dt alignment (Friday release eligibility)", "weights": "Auto-renormalized when pillars are missing"}}, "2026-01-30": {"as_of": "2026-01-30", "risk_regime": {"as_of": "2026-01-30", "risk_on": false, "usd_bid": false, "vix": 17.44, "spx_sma50": 6857.658600000001, "spx_sma200": 6428.97915, "vix_sma20": 16.262500000000003, "dxy_sma50": 120.01701999999999, "dxy_sma200": 120.7277975, "obs_date": "2026-01-30", "spx_obs_date": "2026-01-30", "vix_obs_date": "2026-01-30", "dxy_obs_date": "2026-01-30"}, "weights": {"rates": 0.45, "growth": 0.2, "risk": 0.15, "positioning": 0.2}, "thresholds": {"bias_threshold": 0.2, "conviction": {"neutral_threshold": 0.15, "bands": {"weak": 0.2, "moderate": 0.45, "strong": 0.7, "extreme": 1.01}}}, "notes": {"rates": "2Y yield spread proxy (Stooq), sliced on-or-before as_of", "growth": "Hard mode (CESI/PMI via TradingEconomics, optional) or proxy equity return differential", "risk": "SPX (Stooq) + VIX/Dollar index (FRED) regime tilt, computed as-of", "positioning": "CFTC COT with report_date/release_dt alignment (Friday release eligibility)", "weights": "Auto-renormalized when pillars are missing"}}, "2026-02-06": {"as_of": "2026-02-06", "risk_regime": {"as_of": "2026-02-06", "risk_on": false, "usd_bid": false, "vix": 17.76, "spx_sma50": 6885.685000000001, "spx_sma200": 6469.512549999999, "vix_sma20": 17.139499999999998, "dxy_sma50": 119.680216, "dxy_sma200": 120.60038300000001, "obs_date": "2026-02-06", "spx_obs_date": "2026-02-06", "vix_obs_date": "2026-02-06", "dxy_obs_date": "2026-02-06"}, "weights": {"rates": 0.45, "growth": 0.2, "risk": 0.15, "positioning": 0.2}, "thresholds": {"bias_threshold": 0.2, "conviction": {"neutral_threshold": 0.15, "bands": {"weak": 0.2, "moderate": 0.45, "strong": 0.7, "extreme": 1.01}}}, "notes": {"rates": "2Y yield spread proxy (Stooq), sliced on-or-before as_of", "growth": "Hard mode (CESI/PMI via TradingEconomics, optional) or proxy equity return differential", "risk": "SPX (Stooq) + VIX/Dollar index (FRED) regime tilt, computed as-of", "positioning": "CFTC COT with report_date/release_dt alignment (Friday release eligibility)", "weights": "Auto-renormalized when pillars are missing"}}, "2026-02-13": {"as_of": "2026-02-13", "risk_regime": {"as_of": "2026-02-13", "risk_on": false, "usd_bid": false, "vix": 20.6, "spx_sma50": 6894.634, "spx_sma200": 6504.720600000001, "vix_sma20": 17.873, "dxy_sma50": 119.312646, "dxy_sma200": 120.47096400000001, "obs_date": "2026-02-13", "spx_obs_date": "2026-02-13", "vix_obs_date": "2026-02-13", "dxy_obs_date": "2026-02-13"}, "weights": {"rates": 0.45, "growth": 0.2, "risk": 0.15, "positioning": 0.2}, "thresholds": {"bias_threshold": 0.2, "conviction": {"neutral_threshold": 0.15, "bands": {"weak": 0.2, "moderate": 0.45, "strong": 0.7, "extreme": 1.01}}}, "notes": {"rates": "2Y yield spread proxy (Stooq), sliced on-or-before as_of", "growth": "Hard mode (CESI/PMI via TradingEconomics, optional) or proxy equity return differential", "risk": "SPX (Stooq) + VIX/Dollar index (FRED) regime tilt, computed as-of", "positioning": "CFTC COT with report_date/release_dt alignment (Friday release eligibility)", "weights": "Auto-renormalized when pillars are missing"}}}, "data_quality": {"stale_rate": 0.0, "most_stale_pillar": "rates_stale", "stale_counts": {"rates_stale": 0, "growth_stale": 0, "risk_stale": 0, "pos_stale": 0}, "latest_obs_dates": {"rates": "2026-02-11", "growth": "2026-02-13", "risk": "2026-02-13", "positioning": "2026-02-10"}}};
+    const weeks = DATA.weeks;
+    const pairs = DATA.pairs;
+
+    function biasText(v) {
+      if (v === 1) return "BULL";
+      if (v === -1) return "BEAR";
+      return "NEUTRAL";
+    }
+
+    // Bias heatmap
+    Plotly.newPlot("bias_heat", [{
+      type: "heatmap",
+      x: weeks,
+      y: pairs,
+      z: DATA.bias_heat,
+      zmin: -1, zmax: 1,
+      hovertemplate: "<b>%{y}</b><br>%{x}<br>Bias=%{z} (" +
+                     "%{customdata})<extra></extra>",
+      customdata: DATA.bias_heat.map(r => r.map(v => biasText(v))),
+    }], {
+      margin: {l: 110, r: 10, t: 10, b: 40},
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
+      font: {color: "#e8ecff"},
+      xaxis: {gridcolor: "rgba(255,255,255,0.06)"},
+      yaxis: {gridcolor: "rgba(255,255,255,0.06)"},
+    }, {displayModeBar: false});
+
+    // Score heatmap
+    Plotly.newPlot("score_heat", [{
+      type: "heatmap",
+      x: weeks,
+      y: pairs,
+      z: DATA.score_heat,
+      hovertemplate: "<b>%{y}</b><br>%{x}<br>Score=%{z:.2f}<extra></extra>",
+    }], {
+      margin: {l: 110, r: 10, t: 10, b: 30},
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
+      font: {color: "#e8ecff"},
+      xaxis: {gridcolor: "rgba(255,255,255,0.06)"},
+      yaxis: {gridcolor: "rgba(255,255,255,0.06)"},
+    }, {displayModeBar: false});
+
+    // Conviction heatmap (|score|)
+    Plotly.newPlot("conviction_heat", [{
+      type: "heatmap",
+      x: weeks,
+      y: pairs,
+      z: DATA.conviction_heat,
+      zmin: 0, zmax: 1,
+      hovertemplate: "<b>%{y}</b><br>%{x}<br>|Score|=%{z:.2f}<extra></extra>",
+    }], {
+      margin: {l: 110, r: 10, t: 10, b: 30},
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
+      font: {color: "#e8ecff"},
+      xaxis: {gridcolor: "rgba(255,255,255,0.06)"},
+      yaxis: {gridcolor: "rgba(255,255,255,0.06)"},
+    }, {displayModeBar: false});
+
+    // Counts stacked bar
+    const c = DATA.counts;
+    const traces = c.columns.map((col, i) => {
+      return {
+        type: "bar",
+        name: col,
+        x: c.index,
+        y: c.values.map(r => r[i]),
+      }
+    });
+
+    Plotly.newPlot("counts", traces, {
+      barmode: "stack",
+      margin: {l: 40, r: 10, t: 10, b: 30},
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
+      font: {color: "#e8ecff"},
+      xaxis: {gridcolor: "rgba(255,255,255,0.06)"},
+      yaxis: {gridcolor: "rgba(255,255,255,0.06)", title: "Pairs"},
+      legend: {orientation: "h", y: -0.25},
+    }, {displayModeBar: false});
+
+    const dq = DATA.data_quality || {};
+    const lo = (dq.latest_obs_dates || {});
+    document.getElementById("data_quality").innerHTML =
+      "Stale rows: <b>" + (((dq.stale_rate || 0) * 100).toFixed(1)) + "%</b><br/>" +
+      "Most stale pillar: <b>" + (dq.most_stale_pillar || "n/a") + "</b><br/>" +
+      "Latest obs dates: rates=" + (lo.rates || "n/a") +
+      ", growth=" + (lo.growth || "n/a") +
+      ", risk=" + (lo.risk || "n/a") +
+      ", positioning=" + (lo.positioning || "n/a");
+
+  </script>
+</body>
+</html>

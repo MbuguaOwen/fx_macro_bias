@@ -1,0 +1,10 @@
+requests>=2.31.0
+pandas>=2.2.0
+numpy>=1.26.0
+pyyaml>=6.0.1
+rich>=13.7.0
+tenacity>=8.2.3
+python-dateutil>=2.9.0
+plotly>=5.18.0
+matplotlib>=3.8.0
+reportlab>=4.0.0

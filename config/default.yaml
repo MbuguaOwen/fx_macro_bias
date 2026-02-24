@@ -1,0 +1,146 @@
+pairs:
+  - EURUSD
+  - GBPUSD
+  - USDJPY
+  - USDCHF
+  - USDCAD
+  - AUDUSD
+  - NZDUSD
+  - EURJPY
+  - GBPJPY
+  - EURGBP
+  - EURCHF
+  - AUDJPY
+  - XAUUSD
+  - XAGUSD
+
+weights:
+  rates: 0.45
+  growth: 0.20
+  risk: 0.15
+  positioning: 0.20
+
+# --- Pillar mappings / tickers ---
+# Stooq CSV format: https://stooq.com/q/d/l/?s=<symbol>&i=d
+stooq:
+  # 2Y yield tickers (proxy for rate differentials)
+  yields_2y:
+    USD: "2yusy.b"
+    EUR: "2ydey.b"   # Germany proxy for EUR rates
+    GBP: "2yuky.b"
+    JPY: "2yjpy.b"
+    CHF: "2ychy.b"
+    CAD: "2ycay.b"
+    AUD: "2yauy.b"
+    NZD: "2ynzy.b"
+
+  # Equity indices for growth proxy (3M relative return)
+  equity_index:
+    USD: "^spx"
+    EUR: "^dax"      # Germany proxy when EuroStoxx symbol is unavailable on Stooq
+    GBP: "^ukx"      # FTSE 100
+    JPY: "^nkx"      # Nikkei 225 proxy on Stooq
+    CHF: "^smi"
+    CAD: "^tsx"
+    AUD: "^aor"      # All Ordinaries
+    NZD: "^nz50"
+
+  # Risk proxies
+  risk:
+    spx: "^spx"
+    # VIX / dollar index are sourced from FRED in the engine (see `fred:` below).
+    vix: "^vix"
+    dxy: "dxy"
+
+fred:
+  risk:
+    vix: "VIXCLS"
+    dxy: "DTWEXBGS"   # broad trade-weighted USD (daily, FRED)
+
+cftc:
+  # Socrata datasets
+  tff_futures_only: "gpe5-46if"       # Traders in Financial Futures (futures only)
+  disagg_futures_only: "72hh-3qpy"    # Disaggregated (futures only)
+
+  # Contract name matching for currency futures in TFF (market_and_exchange_names contains these)
+  # You can refine these strings as needed.
+  currency_contract_match:
+    EUR: "EURO FX"
+    GBP: "BRITISH POUND"
+    JPY: "JAPANESE YEN"
+    CHF: "SWISS FRANC"
+    CAD: "CANADIAN DOLLAR"
+    AUD: "AUSTRALIAN DOLLAR"
+    NZD: "NZ DOLLAR"
+    USD: "U.S. DOLLAR INDEX"  # optional
+
+  # Metals in Disaggregated
+  metal_contract_match:
+    XAU: "GOLD"
+    XAG: "SILVER"
+  positioning:
+    usd_zero_baseline: true
+
+thresholds:
+  bias_threshold: 0.20
+  # Optional per-pair overrides. Useful when a cross is structurally skewed and rarely flips.
+  # pair_overrides:
+  #   EURGBP:
+  #     bias_threshold: 0.25
+
+conviction:
+  neutral_threshold: 0.15
+  bands:
+    weak: 0.20
+    moderate: 0.45
+    strong: 0.70
+    extreme: 1.01
+
+staleness:
+  days:
+    rates: 5
+    growth: 45
+    cesi: 7
+    pmi: 45
+    risk: 5
+    # Optional component overrides for the risk pillar.
+    # If DXY is stale, the engine will automatically disable USD tilts rather than silently carrying them.
+    # risk_dxy: 5
+    # risk_spx: 5
+    # risk_vix: 5
+    positioning: 10
+
+# Growth "hard" mode is supported but optional. It requires TradingEconomics API access for
+# CESI + PMI by country (configure env var TRADINGECONOMICS_API_KEY). If unavailable, keep
+# mode=proxy or set fallback_to_proxy=true.
+growth:
+  mode: "proxy"   # set to "hard" to use CESI + PMI (TradingEconomics API)
+  sources: ["cesi", "pmi"]
+  weights:
+    cesi: 0.7
+    pmi: 0.3
+  neutral_threshold: 0.15
+  zscore_window_days: 756   # ~3y
+  normalize_method: "tanh"  # "tanh" or "zscore"
+  scales:
+    cesi: 50.0
+    pmi: 3.0
+  fallback_to_proxy: false
+  te:
+    country_map:
+      USD: "united states"
+      EUR: "euro area"
+      GBP: "united kingdom"
+      JPY: "japan"
+      CHF: "switzerland"
+      CAD: "canada"
+      AUD: "australia"
+      NZD: "new zealand"
+    indicator_map:
+      cesi: "economic surprise index"
+      pmi: "manufacturing pmi"
+
+tradingeconomics:
+  api_key_env: "TRADINGECONOMICS_API_KEY"
+
+cache_dir: ".cache"
