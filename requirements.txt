@@ -1,3 +1,6 @@
+# On Windows, create the venv with a standard CPython build, for example:
+#   py -3.11 -m venv .venv
+# MSYS2/Git Bash Python typically cannot use PyPI wheels for numpy/pandas/pyarrow.
 requests>=2.31.0
 pandas>=2.2.0
 numpy>=1.26.0
@@ -8,3 +11,6 @@ python-dateutil>=2.9.0
 plotly>=5.18.0
 matplotlib>=3.8.0
 reportlab>=4.0.0
+beautifulsoup4>=4.12.3
+playwright>=1.45.0
+pyarrow>=16.1.0

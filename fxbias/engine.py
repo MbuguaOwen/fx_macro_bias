@@ -28,6 +28,8 @@ from .timeseries import (
 
 def _split_pair(pair: str) -> Tuple[str, str]:
     p = pair.strip().upper()
+    if p in ("USOIL", "WTI"):
+        return ("WTI", "USD")
     if len(p) == 6:
         return p[:3], p[3:]
     if p in ("XAUUSD", "XAGUSD"):
@@ -181,8 +183,8 @@ class MacroBiasEngine:
         metals = set()
         for p in pairs:
             b, q = _split_pair(p)
-            (metals if b in ("XAU", "XAG") else currencies).add(b)
-            (metals if q in ("XAU", "XAG") else currencies).add(q)
+            (metals if b in ("XAU", "XAG", "XPT", "XPD") else currencies).add(b)
+            (metals if q in ("XAU", "XAG", "XPT", "XPD") else currencies).add(q)
 
         ymap = self.stooq_cfg.get("yields_2y", {})
         for ccy in currencies:
@@ -602,8 +604,8 @@ class MacroBiasEngine:
         pos_cfg = self.cftc_cfg.get("positioning", {})
         usd_zero_baseline = bool(pos_cfg.get("usd_zero_baseline", True))
 
-        if base in ("XAU", "XAG") or quote in ("XAU", "XAG"):
-            metal = base if base in ("XAU", "XAG") else quote
+        if base in ("XAU", "XAG", "XPT", "XPD") or quote in ("XAU", "XAG", "XPT", "XPD"):
+            metal = base if base in ("XAU", "XAG", "XPT", "XPD") else quote
             name = metmap.get(metal)
             if not name:
                 return self._make_pillar("positioning", asof, None, None, None, {"reason": "missing_metal_mapping"})

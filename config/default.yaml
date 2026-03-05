@@ -1,6 +1,7 @@
 pairs:
   - EURUSD
   - GBPUSD
+  - GBPCHF
   - USDJPY
   - USDCHF
   - USDCAD
@@ -13,6 +14,9 @@ pairs:
   - AUDJPY
   - XAUUSD
   - XAGUSD
+  - XPTUSD
+  - XPDUSD
+  - USOIL
 
 weights:
   rates: 0.45
@@ -78,6 +82,8 @@ cftc:
   metal_contract_match:
     XAU: "GOLD"
     XAG: "SILVER"
+    XPT: "PLATINUM"
+    XPD: "PALLADIUM"
   positioning:
     usd_zero_baseline: true
 
@@ -142,5 +148,118 @@ growth:
 
 tradingeconomics:
   api_key_env: "TRADINGECONOMICS_API_KEY"
+
+market_overlay:
+  enabled: false
+  provider: investing
+  url_env: FXBIAS_OPTIONS_URL
+  default_symbol: XAUUSD
+  default_tenor: 1M
+
+sentiment_overlay:
+  enabled: false
+  affects_core_score: false
+  show_in_report: true
+  thresholds:
+    bias_threshold: 0.20
+  staleness:
+    default_days: 10
+    signals:
+      cot: 10
+      real_yields: 5
+      dxy: 5
+      etf_flows: 14
+      vix: 5
+      gold_silver_ratio: 5
+      boj_tone: 5
+      rate_diff: 5
+      risk_sentiment: 5
+      intervention_risk: 5
+      eia_inventories: 10
+      opec_stance: 30
+      usd: 5
+      baker_hughes_rig_count: 14
+  weights:
+    metals:
+      cot: 0.30
+      real_yields: 0.25
+      dxy: 0.20
+      etf_flows: 0.15
+      vix: 0.10
+      gold_silver_ratio: 0.0
+    jpy:
+      boj_tone: 0.25
+      rate_diff: 0.25
+      risk_sentiment: 0.20
+      cot: 0.20
+      intervention_risk: 0.10
+    oil:
+      eia_inventories: 0.25
+      opec_stance: 0.20
+      cot: 0.20
+      usd: 0.15
+      risk_sentiment: 0.10
+      baker_hughes_rig_count: 0.10
+  families:
+    metals:
+      instruments: [XAUUSD, XAGUSD, XPTUSD, XPDUSD]
+      real_yields:
+        series_id: DFII10
+        trend_window: 20
+        scale: 0.35
+      dxy:
+        series_id: DTWEXBGS
+        trend_window: 50
+        scale: 2.5
+      vix:
+        series_id: VIXCLS
+        trend_window: 20
+        scale: 4.0
+        silver_sensitivity: 0.5
+      ratio:
+        gold_symbol: xauusd
+        silver_symbol: xagusd
+        trend_window: 20
+        scale: 2.0
+    jpy:
+      instruments: [USDJPY, GBPJPY, EURJPY, AUDJPY, NZDJPY]
+      boj_tone:
+        jgb2y_symbol: 2yjpy.b
+        fast_window: 20
+        slow_window: 60
+        scale: 0.10
+      risk_sentiment:
+        multipliers:
+          USDJPY: 0.75
+          EURJPY: 0.75
+          GBPJPY: 0.85
+          AUDJPY: 1.00
+          NZDJPY: 1.00
+      intervention_risk:
+        anchor_symbol: usdjpy
+        high_level: 155.0
+        extreme_level: 160.0
+        trend_days: 63
+        trend_threshold: 0.08
+    oil:
+      instruments: [USOIL, WTI]
+      cot:
+        dataset_id: 72hh-3qpy
+        contract_name: null
+      usd:
+        series_id: DTWEXBGS
+        trend_window: 50
+        scale: 2.5
+      baker_hughes_rig_count:
+        series_id: null
+        trend_window: 26
+        scale: 40.0
+  manual_signals: {}
+
+report_notes:
+  instrument_notes:
+    NAS100: "Clean trends, high volume, NY session perfect"
+    US30: "Clean trends, high volume, NY session perfect"
+    WTI: "Strong NY mover, similar character to Gold"
 
 cache_dir: ".cache"

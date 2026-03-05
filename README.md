@@ -1,81 +1,134 @@
-# FX Macro Bias Engine (4 Pillars)
+# FX Macro Bias Engine (4 Pillars + Market Overlay)
 
-A command-line tool that produces a **directional macro bias** per pair (10+ FX pairs + Gold + Silver) by scoring:
+`fxbias` is a deterministic FX macro scoring engine with a report dashboard.  
+The 4 fundamentals pillars remain unchanged:
 
-1) **Interest-rate differentials** (2Y yield spread proxy)  
-2) **Growth divergence** (proxy via relative equity performance)  
-3) **Risk sentiment** (SPX/VIX/DXY regime)  
-4) **Positioning (COT)** via CFTC Public Reporting (Socrata) datasets
+1. Rates differential
+2. Growth differential
+3. Risk regime
+4. Positioning (COT)
 
-## What you get
-- Per-pair table: pillar scores + weighted final bias (`BULL_BASE`, `BEAR_BASE`, `NEUTRAL`)
-- Conviction tier (`NONE`, `WEAK`, `MODERATE`, `STRONG`, `EXTREME`)
-- Weekly report panel CSV with pillar obs dates / staleness flags
-- A JSON output option for bots / pipelines
-- Disk cache to avoid re-downloading
+Options skew is an optional **Market Overlay** and does not change fundamentals scores.
 
 ## Quick start
 
-```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-source .venv/bin/activate
+Windows PowerShell:
 
+```powershell
+# Recommended: standard CPython, not MSYS2/Git Bash Python
+py -3.11 -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+macOS/Linux:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-# Run defaults (12 FX pairs + XAUUSD + XAGUSD)
+# default run
 python -m fxbias run
 
-# Custom list
-python -m fxbias run --pairs EURUSD GBPUSD USDJPY XAUUSD XAGUSD
-
-# JSON output
+# JSON run output
 python -m fxbias run --format json --out out/bias.json
-
-# Weekly as-of debug for one pair (raw values + scores + provenance)
-python -m fxbias debug-pair --pair EURUSD --weeks 8 --end 2026-02-20
 ```
 
-## Data sources (high level)
-- Market data (prices, indices, bond yields): **Stooq CSV endpoints** (no key)  
-- Positioning: **CFTC Public Reporting Environment (Socrata / SODA)**
+If Windows `pip install -r requirements.txt` starts compiling `numpy` or `pandas`
+from source and mentions `C:\msys64\...` or missing `Python.h`, the venv was
+created from MSYS2/Git Bash Python. Recreate it with `py -3.11 -m venv .venv`
+so `numpy`, `pandas`, and `pyarrow` install from prebuilt Windows wheels.
 
-Notes:
-- Growth divergence defaults to a **proxy** (3M equity-index relative return).
-- Hard growth mode (`CESI` + `PMI`) is supported via TradingEconomics API (optional).
-- Some symbols may be missing for exotic countries; the engine degrades gracefully (score weight re-normalizes).
-- COT positioning is release-aligned (Tuesday `report_date`, Friday `release_dt` eligibility).
-
-## Config
-Edit `config/default.yaml` to:
-- change pairs list
-- adjust weights
-- override ticker mappings
-- tune conviction bands / bias threshold / staleness thresholds
-- enable hard growth mode (`growth.mode: hard`)
-
-## Optional: hard growth mode (CESI + PMI)
-
-The engine supports a configurable hard growth pillar blend using TradingEconomics historical indicators.
-
-1. Set an API key:
-   - Windows PowerShell: `$env:TRADINGECONOMICS_API_KEY="YOUR_KEY"`
-2. In `config/default.yaml`, set:
-   - `growth.mode: "hard"`
-
-If the key is missing/unavailable, hard growth data will be missing and the engine will renormalize weights (or fall back to proxy if `growth.fallback_to_proxy: true`).
-
-## Disclaimer
-Educational / research tool. Not investment advice.
-
-
-## Weekly dashboards (last 4 weeks)
+## Report commands
 
 ```bash
-python -m fxbias report --weeks 4 --format both --outdir out
+# Backward-compatible weekly report
+python -m fxbias report --weeks 4 --format html
+
+# Single-date report
+python -m fxbias report --asof 2026-02-20 --format html
+
+# Compare two report dates
+python -m fxbias report --compare 2026-02-13,2026-02-20 --format html
+
+# Report with market overlay from Investing options page
+python -m fxbias report --asof 2026-02-20 --with-options --options-url <investing-url> --format html
 ```
 
-This generates:
-- `out/weekly_dashboard_YYYYMMDD.html` (interactive)
-- `out/weekly_dashboard_YYYYMMDD.pdf` (print-ready)
-- `out/weekly_panel_YYYYMMDD.csv` (audit)
+## Options snapshot command
+
+```bash
+python -m fxbias options-snapshot \
+  --symbol XAUUSD \
+  --tenor 1M \
+  --url <investing-url> \
+  --out out
+```
+
+Writes:
+- `*_options_summary_*.json`
+- `*_options_surface_*.parquet`
+- `*_options_snapshot_*.html`
+
+## Dashboard tabs
+
+The report HTML contains:
+- `Overview`: bias/score/conviction heatmaps, leaderboard, market overlay summary
+- `Pair Drilldown`: pair + week selectors, pillar scores, raw values, provenance, staleness, overlay details
+- `Compare`: delta per pair and pillar, regime flips, persistence streaks
+- `Data Quality`: stale rates/counts, provider freshness, risk-regime timestamps
+- `Methods`: scoring/weights, renormalization, conviction tiers, staleness logic, overlay semantics
+
+## Output artifacts
+
+`fxbias report` returns generated paths for:
+- `html` (when requested)
+- `pdf` (when requested)
+- `panel.csv`
+- `panel.json`
+- `options.json` (when `--with-options` is enabled)
+
+Example existing samples are under `out/`:
+- `out/weekly_dashboard_*.html`
+- `out/weekly_dashboard_*.pdf`
+
+## Determinism and integrity
+
+- Rows and payloads are sorted deterministically by `as_of` and `pair`.
+- Stable JSON ordering is used for machine outputs.
+- Pillar provenance (`obs_date`, `age_days`) and staleness flags are included.
+- Tests do not require live web access (options parser uses offline fixture HTML).
+
+## Data sources
+
+- Market prices/yields: Stooq
+- Risk components: Stooq + FRED
+- Positioning: CFTC Socrata
+- Optional hard growth mode: TradingEconomics API
+- Optional market overlay: Investing options table (Playwright-rendered HTML)
+
+## Notes
+
+- Installing Playwright browser binaries is required for live options fetch:
+  `playwright install chromium`
+- Educational/research use only, not investment advice.
+
+
+
+//RUN:
+
+python -m fxbias report --weeks 2 --format html --outdir out
+
+python -m fxbias report --with-options --options-url "https://www.investing.com/currencies/xau-usd-options"
+
+
+# safest: bypass activation entirely
+.\.venv\Scripts\python.exe -m fxbias report --weeks 2 --format html --outdir out
+
+.\.venv\Scripts\python.exe -m fxbias report --with-options --options-url "https://www.investing.com/currencies/xau-usd-options"
+
+//REPORT HTML
+.\.venv\Scripts\python.exe -m fxbias report --asof 2026-03-13 --with-sentiment --format both --outdir out
