@@ -1,0 +1,971 @@
+{
+  "affects_core_score": false,
+  "entries": [
+    {
+      "agreement_with_macro": null,
+      "as_of": "2026-01-30",
+      "headline_summary": "AUDJPY sentiment is NEUTRAL (WEAK, +0.10); macro alignment inconclusive; main drivers: boj_tone BEARISH (-0.31), rate_diff BULLISH (+0.31), cot BULLISH (+0.10); unavailable: risk_sentiment.",
+      "meta": {
+        "family": "jpy"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "NEUTRAL",
+      "sentiment_conviction": "WEAK",
+      "sentiment_score": 0.0976917064059158,
+      "sentiment_stale": false,
+      "signals": {
+        "boj_tone": {
+          "bias": "BEARISH",
+          "meta": {
+            "available": true,
+            "contribution": -0.3125,
+            "fast_value": 1.2064000000000001,
+            "fast_window": 20,
+            "jpy_direction_score": 1.0,
+            "proxy": "market_implied_jgb_2y_trend",
+            "slow_value": 1.0804166666666666,
+            "slow_window": 60,
+            "weight": 0.25,
+            "yield_symbol": "2yjpy.b"
+          },
+          "obs_date": "2026-01-30",
+          "score": -1.0,
+          "stale": false
+        },
+        "cot": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "contract": "JAPANESE YEN",
+            "contribution": 0.09769170640591582,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "jpy_positioning",
+            "value": -0.23864248518585024,
+            "weight": 0.2,
+            "z": -0.8254094719405302
+          },
+          "obs_date": "2026-01-27",
+          "score": 0.39076682562366327,
+          "stale": false
+        },
+        "intervention_risk": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "anchor_close": 154.7785,
+            "anchor_symbol": "usdjpy",
+            "available": true,
+            "contribution": 0.0,
+            "extreme_level": 160.0,
+            "high_level": 155.0,
+            "logic": "bearish_pair_when_usdjpy_level_or_trend_implies_intervention_risk",
+            "trend_days": 63,
+            "trend_return": 0.003657243644404451,
+            "trend_start_date": "2025-11-03",
+            "weight": 0.1
+          },
+          "obs_date": "2026-01-30",
+          "score": 0.0,
+          "stale": false
+        },
+        "rate_diff": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "base_obs_date": "2026-01-30",
+            "base_yield": 4.176,
+            "contribution": 0.3125,
+            "quote_obs_date": "2026-01-30",
+            "quote_yield": 1.238,
+            "raw": 2.938,
+            "weight": 0.25
+          },
+          "obs_date": "2026-01-30",
+          "score": 1.0,
+          "stale": false
+        },
+        "risk_sentiment": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "missing_regime",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "AUDJPY"
+    },
+    {
+      "agreement_with_macro": null,
+      "as_of": "2026-01-30",
+      "headline_summary": "EURJPY sentiment is NEUTRAL (WEAK, -0.09); macro alignment inconclusive; main drivers: boj_tone BEARISH (-0.31), rate_diff BULLISH (+0.13), cot BULLISH (+0.10); unavailable: risk_sentiment.",
+      "meta": {
+        "family": "jpy"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "NEUTRAL",
+      "sentiment_conviction": "WEAK",
+      "sentiment_score": -0.08512079359408418,
+      "sentiment_stale": false,
+      "signals": {
+        "boj_tone": {
+          "bias": "BEARISH",
+          "meta": {
+            "available": true,
+            "contribution": -0.3125,
+            "fast_value": 1.2064000000000001,
+            "fast_window": 20,
+            "jpy_direction_score": 1.0,
+            "proxy": "market_implied_jgb_2y_trend",
+            "slow_value": 1.0804166666666666,
+            "slow_window": 60,
+            "weight": 0.25,
+            "yield_symbol": "2yjpy.b"
+          },
+          "obs_date": "2026-01-30",
+          "score": -1.0,
+          "stale": false
+        },
+        "cot": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "contract": "JAPANESE YEN",
+            "contribution": 0.09769170640591582,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "jpy_positioning",
+            "value": -0.23864248518585024,
+            "weight": 0.2,
+            "z": -0.8254094719405302
+          },
+          "obs_date": "2026-01-27",
+          "score": 0.39076682562366327,
+          "stale": false
+        },
+        "intervention_risk": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "anchor_close": 154.7785,
+            "anchor_symbol": "usdjpy",
+            "available": true,
+            "contribution": 0.0,
+            "extreme_level": 160.0,
+            "high_level": 155.0,
+            "logic": "bearish_pair_when_usdjpy_level_or_trend_implies_intervention_risk",
+            "trend_days": 63,
+            "trend_return": 0.003657243644404451,
+            "trend_start_date": "2025-11-03",
+            "weight": 0.1
+          },
+          "obs_date": "2026-01-30",
+          "score": 0.0,
+          "stale": false
+        },
+        "rate_diff": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "base_obs_date": "2026-01-30",
+            "base_yield": 2.068,
+            "contribution": 0.1296875,
+            "quote_obs_date": "2026-01-30",
+            "quote_yield": 1.238,
+            "raw": 0.8300000000000001,
+            "weight": 0.25
+          },
+          "obs_date": "2026-01-30",
+          "score": 0.41500000000000004,
+          "stale": false
+        },
+        "risk_sentiment": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "missing_regime",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "EURJPY"
+    },
+    {
+      "agreement_with_macro": null,
+      "as_of": "2026-01-30",
+      "headline_summary": "GBPJPY sentiment is NEUTRAL (WEAK, +0.10); macro alignment inconclusive; main drivers: boj_tone BEARISH (-0.31), rate_diff BULLISH (+0.31), cot BULLISH (+0.10); unavailable: risk_sentiment.",
+      "meta": {
+        "family": "jpy"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "NEUTRAL",
+      "sentiment_conviction": "WEAK",
+      "sentiment_score": 0.0976917064059158,
+      "sentiment_stale": false,
+      "signals": {
+        "boj_tone": {
+          "bias": "BEARISH",
+          "meta": {
+            "available": true,
+            "contribution": -0.3125,
+            "fast_value": 1.2064000000000001,
+            "fast_window": 20,
+            "jpy_direction_score": 1.0,
+            "proxy": "market_implied_jgb_2y_trend",
+            "slow_value": 1.0804166666666666,
+            "slow_window": 60,
+            "weight": 0.25,
+            "yield_symbol": "2yjpy.b"
+          },
+          "obs_date": "2026-01-30",
+          "score": -1.0,
+          "stale": false
+        },
+        "cot": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "contract": "JAPANESE YEN",
+            "contribution": 0.09769170640591582,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "jpy_positioning",
+            "value": -0.23864248518585024,
+            "weight": 0.2,
+            "z": -0.8254094719405302
+          },
+          "obs_date": "2026-01-27",
+          "score": 0.39076682562366327,
+          "stale": false
+        },
+        "intervention_risk": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "anchor_close": 154.7785,
+            "anchor_symbol": "usdjpy",
+            "available": true,
+            "contribution": 0.0,
+            "extreme_level": 160.0,
+            "high_level": 155.0,
+            "logic": "bearish_pair_when_usdjpy_level_or_trend_implies_intervention_risk",
+            "trend_days": 63,
+            "trend_return": 0.003657243644404451,
+            "trend_start_date": "2025-11-03",
+            "weight": 0.1
+          },
+          "obs_date": "2026-01-30",
+          "score": 0.0,
+          "stale": false
+        },
+        "rate_diff": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "base_obs_date": "2026-01-30",
+            "base_yield": 3.712,
+            "contribution": 0.3125,
+            "quote_obs_date": "2026-01-30",
+            "quote_yield": 1.238,
+            "raw": 2.474,
+            "weight": 0.25
+          },
+          "obs_date": "2026-01-30",
+          "score": 1.0,
+          "stale": false
+        },
+        "risk_sentiment": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "missing_regime",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "GBPJPY"
+    },
+    {
+      "agreement_with_macro": null,
+      "as_of": "2026-01-30",
+      "headline_summary": "USDJPY sentiment is NEUTRAL (WEAK, +0.10); macro alignment inconclusive; main drivers: boj_tone BEARISH (-0.31), rate_diff BULLISH (+0.31), cot BULLISH (+0.10); unavailable: risk_sentiment.",
+      "meta": {
+        "family": "jpy"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "NEUTRAL",
+      "sentiment_conviction": "WEAK",
+      "sentiment_score": 0.0976917064059158,
+      "sentiment_stale": false,
+      "signals": {
+        "boj_tone": {
+          "bias": "BEARISH",
+          "meta": {
+            "available": true,
+            "contribution": -0.3125,
+            "fast_value": 1.2064000000000001,
+            "fast_window": 20,
+            "jpy_direction_score": 1.0,
+            "proxy": "market_implied_jgb_2y_trend",
+            "slow_value": 1.0804166666666666,
+            "slow_window": 60,
+            "weight": 0.25,
+            "yield_symbol": "2yjpy.b"
+          },
+          "obs_date": "2026-01-30",
+          "score": -1.0,
+          "stale": false
+        },
+        "cot": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "contract": "JAPANESE YEN",
+            "contribution": 0.09769170640591582,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "jpy_positioning",
+            "value": -0.23864248518585024,
+            "weight": 0.2,
+            "z": -0.8254094719405302
+          },
+          "obs_date": "2026-01-27",
+          "score": 0.39076682562366327,
+          "stale": false
+        },
+        "intervention_risk": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "anchor_close": 154.7785,
+            "anchor_symbol": "usdjpy",
+            "available": true,
+            "contribution": 0.0,
+            "extreme_level": 160.0,
+            "high_level": 155.0,
+            "logic": "bearish_pair_when_usdjpy_level_or_trend_implies_intervention_risk",
+            "trend_days": 63,
+            "trend_return": 0.003657243644404451,
+            "trend_start_date": "2025-11-03",
+            "weight": 0.1
+          },
+          "obs_date": "2026-01-30",
+          "score": 0.0,
+          "stale": false
+        },
+        "rate_diff": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "base_obs_date": "2026-01-30",
+            "base_yield": 3.535,
+            "contribution": 0.3125,
+            "quote_obs_date": "2026-01-30",
+            "quote_yield": 1.238,
+            "raw": 2.297,
+            "weight": 0.25
+          },
+          "obs_date": "2026-01-30",
+          "score": 1.0,
+          "stale": false
+        },
+        "risk_sentiment": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "missing_regime",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "USDJPY"
+    },
+    {
+      "agreement_with_macro": null,
+      "as_of": "2026-01-30",
+      "headline_summary": "USOIL sentiment is NEUTRAL (WEAK, +0.00); macro alignment inconclusive; unavailable: baker_hughes_rig_count, cot, eia_inventories, opec_stance, risk_sentiment, usd.",
+      "meta": {
+        "family": "oil",
+        "scaffold": true
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "NEUTRAL",
+      "sentiment_conviction": "WEAK",
+      "sentiment_score": 0.0,
+      "sentiment_stale": true,
+      "signals": {
+        "baker_hughes_rig_count": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "source_unavailable",
+            "source": "placeholder",
+            "weight": 0.1
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "cot": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "missing_contract_mapping",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "eia_inventories": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "source_unavailable",
+            "source": "placeholder",
+            "weight": 0.25
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "opec_stance": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "source_unavailable",
+            "source": "placeholder",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "risk_sentiment": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "missing_regime",
+            "weight": 0.1
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "usd": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a11810 state=finished raised ReadTimeout>]",
+            "reason": "series_error",
+            "series_id": "DTWEXBGS",
+            "weight": 0.15
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "USOIL"
+    },
+    {
+      "agreement_with_macro": true,
+      "as_of": "2026-01-30",
+      "headline_summary": "XAGUSD sentiment is BEARISH (STRONG, -0.50); aligned with macro; main drivers: cot BEARISH (-0.50), gold_silver_ratio BEARISH (+0.00); unavailable: dxy, etf_flows, real_yields, vix.",
+      "meta": {
+        "configured_keys": [
+          "dxy",
+          "instruments",
+          "ratio",
+          "real_yields",
+          "vix"
+        ],
+        "family": "metals"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "BEARISH",
+      "sentiment_conviction": "STRONG",
+      "sentiment_score": -0.49615875143402777,
+      "sentiment_stale": false,
+      "signals": {
+        "cot": {
+          "bias": "BEARISH",
+          "meta": {
+            "available": true,
+            "contract": "SILVER",
+            "contribution": -0.49615875143402777,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "positioning",
+            "value": 0.049151860671488856,
+            "weight": 0.3,
+            "z": -1.088395034723339
+          },
+          "obs_date": "2026-01-27",
+          "score": -0.49615875143402777,
+          "stale": false
+        },
+        "dxy": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a33e10 state=finished raised ConnectionError>]",
+            "reason": "series_error",
+            "series_id": "DTWEXBGS",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "etf_flows": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "source_unavailable",
+            "source": "placeholder",
+            "weight": 0.15
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "gold_silver_ratio": {
+          "bias": "BEARISH",
+          "meta": {
+            "available": true,
+            "contribution": 0.0,
+            "gold_symbol": "xauusd",
+            "last_value": 58.3125240569669,
+            "raw_delta": 6.314570962625133,
+            "silver_symbol": "xagusd",
+            "sma_value": 51.99795309434177,
+            "sma_window": 20,
+            "theme": "cross_context",
+            "weight": 0.0
+          },
+          "obs_date": "2026-01-30",
+          "score": -1.0,
+          "stale": false
+        },
+        "real_yields": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a32650 state=finished raised ConnectionError>]",
+            "reason": "series_error",
+            "series_id": "DFII10",
+            "weight": 0.25
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "vix": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a56fd0 state=finished raised ConnectionError>]",
+            "reason": "series_error",
+            "series_id": "VIXCLS",
+            "weight": 0.1
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "XAGUSD"
+    },
+    {
+      "agreement_with_macro": null,
+      "as_of": "2026-01-30",
+      "headline_summary": "XAUUSD sentiment is NEUTRAL (WEAK, -0.05); macro alignment inconclusive; main drivers: cot NEUTRAL (-0.05), gold_silver_ratio BULLISH (+0.00); unavailable: dxy, etf_flows, real_yields, vix.",
+      "meta": {
+        "configured_keys": [
+          "dxy",
+          "instruments",
+          "ratio",
+          "real_yields",
+          "vix"
+        ],
+        "family": "metals"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "NEUTRAL",
+      "sentiment_conviction": "WEAK",
+      "sentiment_score": -0.04734193090934255,
+      "sentiment_stale": false,
+      "signals": {
+        "cot": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": true,
+            "contract": "GOLD",
+            "contribution": -0.04734193090934255,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "positioning",
+            "value": 0.2418995911665776,
+            "weight": 0.3,
+            "z": -0.09475469409609094
+          },
+          "obs_date": "2026-01-27",
+          "score": -0.04734193090934255,
+          "stale": false
+        },
+        "dxy": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b1a6aec90 state=finished raised ConnectionError>]",
+            "reason": "series_error",
+            "series_id": "DTWEXBGS",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "etf_flows": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "source_unavailable",
+            "source": "placeholder",
+            "weight": 0.15
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "gold_silver_ratio": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "contribution": 0.0,
+            "gold_symbol": "xauusd",
+            "last_value": 58.3125240569669,
+            "raw_delta": 6.314570962625133,
+            "silver_symbol": "xagusd",
+            "sma_value": 51.99795309434177,
+            "sma_window": 20,
+            "theme": "cross_context",
+            "weight": 0.0
+          },
+          "obs_date": "2026-01-30",
+          "score": 1.0,
+          "stale": false
+        },
+        "real_yields": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b1a719010 state=finished raised ReadTimeout>]",
+            "reason": "series_error",
+            "series_id": "DFII10",
+            "weight": 0.25
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "vix": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a295d0 state=finished raised ReadTimeout>]",
+            "reason": "series_error",
+            "series_id": "VIXCLS",
+            "weight": 0.1
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "XAUUSD"
+    },
+    {
+      "agreement_with_macro": true,
+      "as_of": "2026-01-30",
+      "headline_summary": "XPDUSD sentiment is BULLISH (EXTREME, +0.81); aligned with macro; main drivers: cot BULLISH (+0.81); unavailable: dxy, etf_flows, gold_silver_ratio, real_yields, vix.",
+      "meta": {
+        "configured_keys": [
+          "dxy",
+          "instruments",
+          "ratio",
+          "real_yields",
+          "vix"
+        ],
+        "family": "metals"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "BULLISH",
+      "sentiment_conviction": "EXTREME",
+      "sentiment_score": 0.8070050621320563,
+      "sentiment_stale": false,
+      "signals": {
+        "cot": {
+          "bias": "BULLISH",
+          "meta": {
+            "available": true,
+            "contract": "PALLADIUM",
+            "contribution": 0.8070050621320563,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "positioning",
+            "value": -0.02839512628771636,
+            "weight": 0.3,
+            "z": 2.236762132092149
+          },
+          "obs_date": "2026-01-27",
+          "score": 0.8070050621320563,
+          "stale": false
+        },
+        "dxy": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a32050 state=finished raised ReadTimeout>]",
+            "reason": "series_error",
+            "series_id": "DTWEXBGS",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "etf_flows": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "source_unavailable",
+            "source": "placeholder",
+            "weight": 0.15
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "gold_silver_ratio": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "not_applicable",
+            "symbol": "XPDUSD",
+            "weight": 0.0
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "real_yields": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a30e10 state=finished raised ConnectionError>]",
+            "reason": "series_error",
+            "series_id": "DFII10",
+            "weight": 0.25
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "vix": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b1a719390 state=finished raised ReadTimeout>]",
+            "reason": "series_error",
+            "series_id": "VIXCLS",
+            "weight": 0.1
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "XPDUSD"
+    },
+    {
+      "agreement_with_macro": null,
+      "as_of": "2026-01-30",
+      "headline_summary": "XPTUSD sentiment is NEUTRAL (WEAK, -0.18); macro alignment inconclusive; main drivers: cot NEUTRAL (-0.18); unavailable: dxy, etf_flows, gold_silver_ratio, real_yields, vix.",
+      "meta": {
+        "configured_keys": [
+          "dxy",
+          "instruments",
+          "ratio",
+          "real_yields",
+          "vix"
+        ],
+        "family": "metals"
+      },
+      "overlay_type": "sentiment",
+      "sentiment_bias": "NEUTRAL",
+      "sentiment_conviction": "WEAK",
+      "sentiment_score": -0.17998789324292616,
+      "sentiment_stale": false,
+      "signals": {
+        "cot": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": true,
+            "contract": "PLATINUM",
+            "contribution": -0.17998789324292616,
+            "n": 156,
+            "release_dt": "2026-01-30 23:59:59+00:00",
+            "report_date": "2026-01-27",
+            "theme": "positioning",
+            "value": 0.03056356289573394,
+            "weight": 0.3,
+            "z": -0.3639403529562528
+          },
+          "obs_date": "2026-01-27",
+          "score": -0.17998789324292616,
+          "stale": false
+        },
+        "dxy": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b199f83d0 state=finished raised ConnectionError>]",
+            "reason": "series_error",
+            "series_id": "DTWEXBGS",
+            "weight": 0.2
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "etf_flows": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "source_unavailable",
+            "source": "placeholder",
+            "weight": 0.15
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "gold_silver_ratio": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "reason": "not_applicable",
+            "symbol": "XPTUSD",
+            "weight": 0.0
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "real_yields": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a13290 state=finished raised ReadTimeout>]",
+            "reason": "series_error",
+            "series_id": "DFII10",
+            "weight": 0.25
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        },
+        "vix": {
+          "bias": "NEUTRAL",
+          "meta": {
+            "available": false,
+            "contribution": 0.0,
+            "error": "RetryError[<Future at 0x14b19a55210 state=finished raised ConnectionError>]",
+            "reason": "series_error",
+            "series_id": "VIXCLS",
+            "weight": 0.1
+          },
+          "obs_date": null,
+          "score": 0.0,
+          "stale": true
+        }
+      },
+      "symbol": "XPTUSD"
+    }
+  ],
+  "error": null,
+  "request": {
+    "affects_core_score": false,
+    "asofs": [
+      "2026-01-30"
+    ],
+    "pairs": [
+      "AUDJPY",
+      "AUDUSD",
+      "EURCHF",
+      "EURGBP",
+      "EURJPY",
+      "EURUSD",
+      "GBPCHF",
+      "GBPJPY",
+      "GBPUSD",
+      "NZDUSD",
+      "USDCAD",
+      "USDCHF",
+      "USDJPY",
+      "USOIL",
+      "XAGUSD",
+      "XAUUSD",
+      "XPDUSD",
+      "XPTUSD"
+    ],
+    "show_in_report": true
+  },
+  "requested": true,
+  "show_in_report": true
+}

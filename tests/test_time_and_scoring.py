@@ -97,6 +97,15 @@ class TestRiskStalenessBehavior(unittest.TestCase):
         self.assertAlmostEqual(+0.5, float(r.score), places=6)
 
 
+class TestInstrumentAliases(unittest.TestCase):
+    def test_split_pair_supports_watchlist_aliases(self):
+        from fxbias.engine import _split_pair
+
+        self.assertEqual(("WTI", "USD"), _split_pair("USOIL"))
+        self.assertEqual(("XPT", "USD"), _split_pair("XPTUSD"))
+        self.assertEqual(("XPD", "USD"), _split_pair("XPDUSD"))
+        self.assertEqual(("GBP", "CHF"), _split_pair("GBPCHF"))
+
+
 if __name__ == "__main__":
     unittest.main()
-
