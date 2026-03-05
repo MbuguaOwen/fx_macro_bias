@@ -143,4 +143,17 @@ growth:
 tradingeconomics:
   api_key_env: "TRADINGECONOMICS_API_KEY"
 
+market_overlay:
+  enabled: false
+  provider: investing
+  url_env: FXBIAS_OPTIONS_URL
+  default_symbol: XAUUSD
+  default_tenor: 1M
+
+report_notes:
+  instrument_notes:
+    NAS100: "Clean trends, high volume, NY session perfect"
+    US30: "Clean trends, high volume, NY session perfect"
+    WTI: "Strong NY mover, similar character to Gold"
+
 cache_dir: ".cache"

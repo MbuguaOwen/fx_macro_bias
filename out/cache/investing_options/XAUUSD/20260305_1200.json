@@ -1,0 +1,90 @@
+{
+  "metrics": {
+    "approx_atm_iv": 16.4,
+    "days_to_expiry": 15,
+    "expiry_date": "2026-03-20",
+    "iv_10_call": 16.8,
+    "iv_10_put": 15.8,
+    "iv_25_call": 16.6,
+    "iv_25_put": 16.0,
+    "label": "BULLISH",
+    "rr10": 1.0,
+    "rr25": 0.6000000000000014,
+    "spot": 2034.5,
+    "symbol": "XAUUSD",
+    "tenor": "1M"
+  },
+  "rows": [
+    {
+      "call_delta": 0.9,
+      "call_price": 8.2,
+      "days_to_expiry": 15,
+      "expiry_date": "2026-03-20",
+      "imp_vol": 15.8,
+      "put_delta": -0.1,
+      "put_price": 67.1,
+      "source_url": "https://www.investing.com/currencies/xau-usd-options",
+      "spot": 2034.5,
+      "strike": 1960.0,
+      "symbol": "XAUUSD",
+      "tenor": "1M"
+    },
+    {
+      "call_delta": 0.75,
+      "call_price": 14.4,
+      "days_to_expiry": 15,
+      "expiry_date": "2026-03-20",
+      "imp_vol": 16.0,
+      "put_delta": -0.25,
+      "put_price": 49.6,
+      "source_url": "https://www.investing.com/currencies/xau-usd-options",
+      "spot": 2034.5,
+      "strike": 1990.0,
+      "symbol": "XAUUSD",
+      "tenor": "1M"
+    },
+    {
+      "call_delta": 0.5,
+      "call_price": 33.7,
+      "days_to_expiry": 15,
+      "expiry_date": "2026-03-20",
+      "imp_vol": 16.4,
+      "put_delta": -0.5,
+      "put_price": 33.5,
+      "source_url": "https://www.investing.com/currencies/xau-usd-options",
+      "spot": 2034.5,
+      "strike": 2035.0,
+      "symbol": "XAUUSD",
+      "tenor": "1M"
+    },
+    {
+      "call_delta": 0.25,
+      "call_price": 51.4,
+      "days_to_expiry": 15,
+      "expiry_date": "2026-03-20",
+      "imp_vol": 16.6,
+      "put_delta": -0.75,
+      "put_price": 18.3,
+      "source_url": "https://www.investing.com/currencies/xau-usd-options",
+      "spot": 2034.5,
+      "strike": 2080.0,
+      "symbol": "XAUUSD",
+      "tenor": "1M"
+    },
+    {
+      "call_delta": 0.1,
+      "call_price": 67.2,
+      "days_to_expiry": 15,
+      "expiry_date": "2026-03-20",
+      "imp_vol": 16.8,
+      "put_delta": -0.9,
+      "put_price": 9.8,
+      "source_url": "https://www.investing.com/currencies/xau-usd-options",
+      "spot": 2034.5,
+      "strike": 2110.0,
+      "symbol": "XAUUSD",
+      "tenor": "1M"
+    }
+  ],
+  "symbol": "XAUUSD"
+}

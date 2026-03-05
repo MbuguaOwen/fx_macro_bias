@@ -23,4 +23,12 @@ def load_config(path: str) -> dict:
     cfg.setdefault("tradingeconomics", {"api_key_env": "TRADINGECONOMICS_API_KEY"})
     cftc = cfg.setdefault("cftc", {})
     cftc.setdefault("positioning", {"usd_zero_baseline": True})
+    market_overlay = cfg.setdefault("market_overlay", {})
+    market_overlay.setdefault("enabled", False)
+    market_overlay.setdefault("provider", "investing")
+    market_overlay.setdefault("url_env", "FXBIAS_OPTIONS_URL")
+    market_overlay.setdefault("default_symbol", "XAUUSD")
+    market_overlay.setdefault("default_tenor", "1M")
+    report_notes = cfg.setdefault("report_notes", {})
+    report_notes.setdefault("instrument_notes", {})
     return cfg

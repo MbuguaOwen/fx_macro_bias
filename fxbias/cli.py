@@ -1,13 +1,130 @@
+from __future__ import annotations
+
 import argparse
+import datetime as dt
 import json
+import os
 from pathlib import Path
+from typing import Optional, Tuple
+
 import pandas as pd
 from rich.console import Console
 from rich.table import Table
 
 from .config import load_config
 from .engine import MacroBiasEngine
-from .reporting import build_weekly_report
+from .providers.investing_options import compute_skew_metrics, fetch_options_surface
+from .reporting import _weekly_asof_dates, build_weekly_report
+
+
+def _parse_compare_dates(s: Optional[str]) -> Optional[Tuple[str, str]]:
+    if not s:
+        return None
+    parts = [x.strip() for x in str(s).split(",") if x.strip()]
+    if len(parts) != 2:
+        raise ValueError("--compare must be in format YYYY-MM-DD,YYYY-MM-DD")
+    # validate ISO date format early
+    dt.date.fromisoformat(parts[0])
+    dt.date.fromisoformat(parts[1])
+    return parts[0], parts[1]
+
+
+def _make_options_overlay(
+    *,
+    provider: str,
+    requested: bool,
+    symbol: str,
+    as_of: str,
+    url: Optional[str],
+    tenor: str,
+    headless: bool,
+    refresh: bool,
+) -> dict:
+    request = {
+        "provider": str(provider or "investing"),
+        "symbol": str(symbol or "XAUUSD").upper(),
+        "tenor": str(tenor or "1M"),
+        "url": str(url or ""),
+        "as_of": str(as_of or ""),
+    }
+    payload = {
+        "requested": bool(requested),
+        "entries": [],
+        "error": None,
+        "request": request,
+    }
+
+    if not payload["requested"]:
+        return payload
+    if not url:
+        payload["error"] = "No options URL resolved. Use --options-url or set FXBIAS_OPTIONS_URL."
+        return payload
+
+    try:
+        surface = fetch_options_surface(url=url, tenor=request["tenor"], headless=headless, refresh=refresh)
+        if surface.empty:
+            payload["error"] = "Options overlay fetch returned no rows."
+            return payload
+
+        sym = request["symbol"]
+        if "symbol" in surface.columns:
+            surface["symbol"] = sym
+        metrics = compute_skew_metrics(surface)
+        metrics["symbol"] = sym
+        metrics["as_of"] = request["as_of"]
+        metrics["source_url"] = url
+        payload["entries"] = [metrics]
+        return payload
+    except Exception as exc:
+        payload["error"] = str(exc)
+        return payload
+
+
+def _write_options_snapshot_artifacts(symbol: str, out_dir: Path, surface: pd.DataFrame, summary: dict) -> dict:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    stamp = dt.datetime.utcnow().strftime("%Y%m%d_%H%M")
+    sym = symbol.upper()
+
+    parquet_path = out_dir / f"{sym}_options_surface_{stamp}.parquet"
+    json_path = out_dir / f"{sym}_options_summary_{stamp}.json"
+    html_path = out_dir / f"{sym}_options_snapshot_{stamp}.html"
+
+    try:
+        surface.to_parquet(parquet_path, index=False)
+    except Exception as exc:
+        raise RuntimeError("pyarrow is required for parquet output. Install with: pip install pyarrow") from exc
+    json_path.write_text(json.dumps(summary, indent=2, sort_keys=True, default=str), encoding="utf-8")
+
+    tbl = surface.to_html(index=False, border=0, classes="tbl")
+    html = f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{sym} Options Snapshot</title>
+  <style>
+    body {{ font-family: "IBM Plex Sans", "Segoe UI", sans-serif; margin: 24px; color: #0f1f33; }}
+    .card {{ border: 1px solid #cad8e8; border-radius: 12px; padding: 14px; margin-bottom: 14px; }}
+    .pill {{ display: inline-block; border: 1px solid #9ab3cf; border-radius: 999px; padding: 2px 8px; font-weight: 700; }}
+    .tbl {{ border-collapse: collapse; width: 100%; font-size: 12px; }}
+    .tbl th, .tbl td {{ border-bottom: 1px solid #e5edf4; text-align: right; padding: 6px; }}
+    .tbl th:first-child, .tbl td:first-child {{ text-align: left; }}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>{sym} Options Snapshot</h2>
+    <div><span class="pill">{summary.get("label", "NEUTRAL")}</span></div>
+    <p>rr10={summary.get("rr10")} | rr25={summary.get("rr25")} | approx_atm_iv={summary.get("approx_atm_iv")} | expiry={summary.get("expiry_date")}</p>
+  </div>
+  <div class="card">{tbl}</div>
+</body>
+</html>
+"""
+    html_path.write_text(html, encoding="utf-8")
+
+    return {"parquet": str(parquet_path), "json": str(json_path), "html": str(html_path)}
+
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="fxbias", description="FX Macro Bias Engine (4 pillars)")
@@ -21,13 +138,28 @@ def _build_parser() -> argparse.ArgumentParser:
     run.add_argument("--asof", default=None, help="As-of date YYYY-MM-DD (default: latest available)")
     run.add_argument("--refresh", action="store_true", help="Ignore cache and refetch")
 
-    report = sub.add_parser("report", help="Generate weekly dashboards (HTML/PDF) for the last N weeks")
+    report = sub.add_parser("report", help="Generate weekly dashboards (HTML/PDF)")
     report.add_argument("--pairs", nargs="*", help="Override pairs list")
     report.add_argument("--weeks", type=int, default=4, help="How many weeks back (default: 4)")
+    report.add_argument("--asof", default=None, help="Single as-of date YYYY-MM-DD (overrides --weeks)")
     report.add_argument("--end", default=None, help="End date YYYY-MM-DD (default: today, aligned to last Friday)")
+    report.add_argument("--compare", default=None, help="Compare dates A,B (e.g. 2026-02-13,2026-02-20)")
+    report.add_argument("--with-options", action="store_true", help="Enable Investing.com options skew overlay")
+    report.add_argument("--options-url", default=None, help="Investing options page URL")
+    report.add_argument("--options-symbol", default=None, help="Overlay symbol label (defaults to config)")
+    report.add_argument("--options-tenor", default=None, help="Overlay tenor label (defaults to config)")
+    report.add_argument("--no-headless", action="store_true", help="Disable headless browser for options fetch")
     report.add_argument("--outdir", default="out", help="Output directory")
-    report.add_argument("--format", choices=["html","pdf","both"], default="both")
+    report.add_argument("--format", choices=["html", "pdf", "both"], default="both")
     report.add_argument("--refresh", action="store_true", help="Ignore cache and refetch")
+
+    opt = sub.add_parser("options-snapshot", help="Capture a market overlay options snapshot")
+    opt.add_argument("--symbol", required=True, help="Symbol label, e.g. XAUUSD")
+    opt.add_argument("--tenor", default="1M", help="Tenor label (default: 1M)")
+    opt.add_argument("--url", required=True, help="Investing options URL")
+    opt.add_argument("--out", default="out", help="Output directory")
+    opt.add_argument("--no-headless", action="store_true", help="Disable headless browser")
+    opt.add_argument("--refresh", action="store_true", help="Ignore cache and refetch")
 
     dbg = sub.add_parser("debug-pair", help="Debug one pair across weekly as-of dates with pillar raw/score values")
     dbg.add_argument("--pair", required=True, help="FX pair, e.g. EURUSD")
@@ -35,7 +167,7 @@ def _build_parser() -> argparse.ArgumentParser:
     dbg.add_argument("--end", default=None, help="End date YYYY-MM-DD (default: today aligned to Friday)")
     dbg.add_argument("--no-provenance", action="store_true", help="Suppress provenance table")
 
-    cal = sub.add_parser("calibrate-conviction", help="Compute conviction (abs(score)) distribution and suggest band thresholds")
+    cal = sub.add_parser("calibrate-conviction", help="Compute conviction distribution and suggest thresholds")
     cal.add_argument("--pairs", nargs="*", help="Override pairs list")
     cal.add_argument("--weeks", type=int, default=52, help="How many weeks back (default: 52)")
     cal.add_argument("--end", default=None, help="End date YYYY-MM-DD (default: today aligned to Friday)")
@@ -44,9 +176,11 @@ def _build_parser() -> argparse.ArgumentParser:
 
     return p
 
+
 def main():
     args = _build_parser().parse_args()
     cfg = load_config(args.config)
+
     if args.cmd == "run":
         pairs = args.pairs or cfg["pairs"]
         engine = MacroBiasEngine(cfg, refresh=args.refresh)
@@ -63,11 +197,10 @@ def main():
                 print(s)
             return
 
-        # table
         console = Console(width=220)
         table = Table(title=f"FX Macro Bias (as_of={meta.get('as_of')})")
         for col in ["pair", "rates", "growth", "risk", "positioning", "score", "conviction", "bias"]:
-            table.add_column(col, justify="right" if col not in ("pair","bias") else "left")
+            table.add_column(col, justify="right" if col not in ("pair", "bias") else "left")
         for _, r in df.iterrows():
             table.add_row(
                 r["pair"],
@@ -80,21 +213,95 @@ def main():
                 str(r.get("final_bias", r.get("bias", ""))),
             )
         console.print(table)
-        console.print(f"[dim]Notes: weights auto-renormalize when a pillar is missing for a pair.[/dim]")
+        console.print("[dim]Notes: weights auto-renormalize when a pillar is missing for a pair.[/dim]")
+        return
 
-    elif args.cmd == "report":
+    if args.cmd == "report":
         pairs = args.pairs or cfg["pairs"]
-        formats = ("html","pdf") if args.format == "both" else (args.format,)
-        outputs = build_weekly_report(cfg, pairs=pairs, weeks=args.weeks, end_date=args.end, outdir=args.outdir, refresh=args.refresh, formats=formats)
+        formats = ("html", "pdf") if args.format == "both" else (args.format,)
+        try:
+            compare_dates = _parse_compare_dates(args.compare)
+        except ValueError as exc:
+            raise SystemExit(str(exc))
+
+        overlay_cfg = cfg.get("market_overlay", {}) or {}
+        overlay_provider = str(overlay_cfg.get("provider") or "investing")
+        overlay_env = str(overlay_cfg.get("url_env") or "FXBIAS_OPTIONS_URL")
+        resolved_url = (
+            args.options_url
+            or os.getenv(overlay_env)
+            or overlay_cfg.get("options_url")
+        )
+        overlay_requested = bool(args.with_options or overlay_cfg.get("enabled") or resolved_url)
+        overlay_symbol = str(args.options_symbol or overlay_cfg.get("default_symbol") or "XAUUSD").upper()
+        overlay_tenor = str(args.options_tenor or overlay_cfg.get("default_tenor") or "1M")
+        asofs = _weekly_asof_dates(weeks=args.weeks, end_date=args.end, asof=args.asof)
+        overlay_asof = asofs[-1] if asofs else ""
+        market_overlay = _make_options_overlay(
+            provider=overlay_provider,
+            requested=overlay_requested,
+            symbol=overlay_symbol,
+            as_of=overlay_asof,
+            url=resolved_url,
+            tenor=overlay_tenor,
+            headless=(not args.no_headless),
+            refresh=args.refresh,
+        )
+
+        outputs = build_weekly_report(
+            cfg,
+            pairs=pairs,
+            weeks=args.weeks,
+            end_date=args.end,
+            outdir=args.outdir,
+            refresh=args.refresh,
+            formats=formats,
+            asof=args.asof,
+            compare_dates=compare_dates,
+            market_overlay=market_overlay,
+            report_notes=cfg.get("report_notes") or {},
+        )
+
         console = Console()
         table = Table(title="Weekly Dashboard Outputs")
         table.add_column("type", style="bold")
         table.add_column("path")
-        for k,v in outputs.items():
-            table.add_row(k, v)
+        for k in sorted(outputs.keys()):
+            table.add_row(k, outputs[k])
         console.print(table)
+        return
 
-    elif args.cmd == "debug-pair":
+    if args.cmd == "options-snapshot":
+        try:
+            surface = fetch_options_surface(
+                url=args.url,
+                tenor=args.tenor,
+                headless=(not args.no_headless),
+                refresh=args.refresh,
+            )
+        except RuntimeError as exc:
+            raise SystemExit(str(exc))
+        symbol = args.symbol.upper()
+        if "symbol" in surface.columns:
+            surface["symbol"] = symbol
+        summary = compute_skew_metrics(surface)
+        summary["symbol"] = symbol
+        summary["source_url"] = args.url
+        try:
+            artifacts = _write_options_snapshot_artifacts(symbol=symbol, out_dir=Path(args.out), surface=surface, summary=summary)
+        except RuntimeError as exc:
+            raise SystemExit(str(exc))
+
+        console = Console()
+        table = Table(title=f"Options Snapshot ({symbol})")
+        table.add_column("type", style="bold")
+        table.add_column("path")
+        for k in ("json", "parquet", "html"):
+            table.add_row(k, artifacts[k])
+        console.print(table)
+        return
+
+    if args.cmd == "debug-pair":
         engine = MacroBiasEngine(cfg, refresh=getattr(args, "refresh", False))
         df_debug, provenance = engine.debug_pair_series(pair=args.pair, weeks=args.weeks, end_date=args.end)
 
@@ -112,9 +319,11 @@ def main():
             "total_score",
             "final_bias",
         ]
+
         def _num(v):
             try:
                 import pandas as _pd
+
                 if v is None or _pd.isna(v):
                     return None
                 return float(v)
@@ -137,6 +346,7 @@ def main():
             for c in ["rates", "growth", "risk", "positioning"]:
                 ptable.add_column(c)
             for row in provenance:
+
                 def _pp(k):
                     x = row.get(k, {}) or {}
                     raw = x.get("raw")
@@ -145,10 +355,12 @@ def main():
                     except Exception:
                         raw_s = "NA"
                     return f'{x.get("obs_date") or "NA"} / {x.get("age_days") if x.get("age_days") is not None else "NA"} / {raw_s}'
+
                 ptable.add_row(str(row.get("asof")), _pp("rates"), _pp("growth"), _pp("risk"), _pp("positioning"))
             console.print(ptable)
+        return
 
-    elif args.cmd == "calibrate-conviction":
+    if args.cmd == "calibrate-conviction":
         pairs = args.pairs or cfg["pairs"]
         engine = MacroBiasEngine(cfg, refresh=getattr(args, "refresh", False))
         out = engine.conviction_distribution(pairs=pairs, weeks=args.weeks, end_date=args.end)
@@ -167,15 +379,15 @@ def main():
         q = out.get("quantiles") or {}
         summ = out.get("summary") or {}
         rec = out.get("recommended") or {}
-        bands = (rec.get("bands") or {})
+        bands = rec.get("bands") or {}
 
         t = Table(title=f"Conviction Calibration (weeks={out.get('weeks')}, pairs={out.get('pairs')}, n={out.get('n')})")
         t.add_column("metric", style="bold")
         t.add_column("value")
-        for k in ["min","max","mean","std"]:
+        for k in ["min", "max", "mean", "std"]:
             if k in summ:
                 t.add_row(k, f"{float(summ[k]):.4f}")
-        for k in ["q05","q10","q25","q50","q75","q90","q95"]:
+        for k in ["q05", "q10", "q25", "q50", "q75", "q90", "q95"]:
             key = float(k[1:]) / 100.0
             if key in q:
                 t.add_row(k, f"{float(q[key]):.4f}")
@@ -186,10 +398,12 @@ def main():
         t2.add_column("value")
         if rec.get("neutral_threshold") is not None:
             t2.add_row("neutral_threshold", f"{float(rec['neutral_threshold']):.4f}")
-        for k in ["weak","moderate","strong","extreme"]:
+        for k in ["weak", "moderate", "strong", "extreme"]:
             if k in bands:
                 t2.add_row(f"bands.{k}", f"{float(bands[k]):.4f}")
         console.print(t2)
+        return
+
 
 if __name__ == "__main__":
     main()
